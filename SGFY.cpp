@@ -93,10 +93,10 @@ void store::getCommand(char c) {
             notFlaged = false;
             break;
         case '|':
-            if (vindex > 0) {
-                intBank[vindex][index] = intBank[vindex - 1][index];
+            if (vindex < 127) {
+                intBank[vindex][index] = intBank[vindex + 1][index];
             } else {
-                intBank[vindex][index] = intBank[127][index];
+                intBank[vindex][index] = intBank[0][index];
             }
             break;
         case '}':
