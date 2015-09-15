@@ -19,6 +19,11 @@ struct store {
     bool notFlaged;
 
     store() {
+        for (int i = 0; i < 128; i++) {
+            for (int j = 0; j < 128; j++) {
+                intBank[j][i] = 0;
+            }
+        }
         index = 0;
         vindex = 0;
         printAsChar = true;
