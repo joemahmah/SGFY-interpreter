@@ -17,6 +17,7 @@ struct store {
     int index, vindex;
     bool printAsChar;
     bool notFlaged;
+    string storedLoop;
 
     store() {
         for (int i = 0; i < 128; i++) {
@@ -29,10 +30,117 @@ struct store {
         printAsChar = true;
     }
 
+    void getCommand(istream & inputStream);
     void getCommand(char c);
 };
 
+void store::getCommand(istream & inputStream) {
+
+    char c = inputStream.get();
+
+    switch (c) {
+        case '+':
+            intBank[vindex][index]++;
+            break;
+        case '-':
+            intBank[vindex][index]--;
+            break;
+        case '>':
+            if (index == 127) {
+                index = 0;
+            } else {
+                index++;
+            }
+            break;
+        case '<':
+            if (index == 0) {
+                index = 127;
+            } else {
+                index--;
+            }
+            break;
+        case '^':
+            if (vindex == 127) {
+                vindex = 0;
+            } else {
+                vindex++;
+            }
+            break;
+        case '\\':
+            if (vindex == 0) {
+                vindex = 127;
+            } else {
+                vindex--;
+            }
+            break;
+        case '#':
+            index = vindex = 0;
+            break;
+        case ',':
+            intBank[vindex][index] = (int) cin.get();
+            break;
+        case '.':
+            if (printAsChar) {
+                cout << (char) intBank[vindex][index];
+            } else {
+                cout << intBank[vindex][index];
+            }
+            break;
+        case '=':
+            if (intBank[vindex][index] == (int) 'x') {
+                intBank[vindex][index] = 1;
+            } else {
+                intBank[vindex][index] = 0;
+            }
+            break;
+        case '?':
+            intBank[vindex][index] = rand();
+            break;
+        case '@':
+            printAsChar = !printAsChar;
+            break;
+        case '~':
+            notFlaged = false;
+            break;
+        case '|':
+            if (vindex < 127) {
+                intBank[vindex][index] = intBank[vindex + 1][index];
+            } else {
+                intBank[vindex][index] = intBank[0][index];
+            }
+            break;
+        case '}':
+            if (index > 0) {
+                intBank[vindex][index] = intBank[vindex][index - 1];
+            } else {
+                intBank[vindex][index] = intBank[vindex][127];
+            }
+            break;
+        case '[':
+            if (intBank[vindex][index] != 0) {
+                while (inputStream.peek() != ']') {
+                    storedLoop += inputStream.get();
+                }
+            } else {
+                while (inputStream.get() != ']') {
+
+                }
+            }
+            break;
+        case ']':
+            while (intBank[vindex][index] != 0) {
+                for (char c : storedLoop) {
+                    this->getCommand(c);
+                }
+            }
+            storedLoop = "";
+            break;
+
+    }
+}
+
 void store::getCommand(char c) {
+
     switch (c) {
         case '+':
             intBank[vindex][index]++;
@@ -120,6 +228,7 @@ void store::getCommand(char c) {
  */
 int main(int argc, char** argv) {
 
+
     srand(time(NULL));
 
     store s;
@@ -135,12 +244,12 @@ int main(int argc, char** argv) {
 
         if (choice == "cin") {
             while (s.notFlaged) {
-                s.getCommand(cin.get());
+                s.getCommand(cin);
             }
         } else {
-            ifstream stream(choice.c_str());
+            ifstream stream(choice);
             while (!stream.eof()) {
-                s.getCommand(stream.get());
+                s.getCommand(stream);
             }
         }
 
