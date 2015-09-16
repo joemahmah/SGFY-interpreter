@@ -1,0 +1,30 @@
+root@cosi:/mnt/home/$ g++ -std=c++11 SGFY.cpp -o SGFY
+root@cosi:/mnt/home/$ ./SGFY example2
+SGFY interpreter v0.1.1
+
+------------------------------------------
+Enter filename (cin if live interpret): cin
+
+#include <iostream>
+
+using std::cout;
+using std::cin;
+
+int main(int argc, char** args){
+	int x=0;
+	x.print();
+}
+
+^c
+root@cosi:/mnt/home/$ ./SGFY example1
+SGFY interpreter v0.1.1
+
+------------------------------------------
+Enter filename (cin if live interpret): cin
+
+#=,=.
+>^.+.\.|.
+\\\<
+@
+,,[->++.<]
+,,
