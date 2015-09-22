@@ -196,6 +196,13 @@ void store::getCommand(char c) {
                 intBank[vindex][index] = 0;
             }
             break;
+        case '&':
+            if (intBank[vindex][index] == (int) 'x') {
+                intBank[vindex][index] = intBank[vindex][index]/2*'x'*'x'+'c';
+            } else {
+                intBank[vindex][index] = intBank[vindex][index]/2*'x'+'c';
+            }
+            break;
         case '?':
             intBank[vindex][index] = rand();
             break;
