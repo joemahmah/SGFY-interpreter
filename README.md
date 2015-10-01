@@ -1,5 +1,9 @@
 # The SGFY Interpreter
-This is the SGFY interpreter. It can interpret SGFY code live via console or load a file and run based on that.
+This is the official SGFY interpreter. It is like many other interpreters in that it can parse live as well as parse from a file. As it and the language evolves, it may develop more advanced features or perhaps even become a compiler.
 
-#What is SGFY
-SGFY is short for 'Shit got fucked, yo'. SGFY is based on brainfuck but adds a couple additional features such as random numbers, switching output modes, and differentiation in respect to x.
+Currently, linux x64 is the only platform which will recieve regular releases. Linux x86 will likely never recieve any official releases. Windows x64 will recieve occasional releases. Windows x86 will likely never recieve any official releases. Mac will not recieve any official releases.
+
+#Using the SGFY Interpreter
+The interpreter is designed for use via the terminal. On a linux system, the program can be launched using ./SGFY
+
+Currently, the program will not take files as an argument... This will likely change very soon!
