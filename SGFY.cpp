@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Sfuck.cpp
  * Author: Michael Hrcek <hrcekmj@clarkson.edu>
  *
@@ -243,11 +243,29 @@ void store::getCommand(char c) {
  */
 int main(int argc, char** argv) {
 
+    int x = 1024, y = 1024;
+    bool verbose = false;
+
+    for(int i=1; i<argc; i++){
+	if(string(argv[i]) == "-S" && i + 2 < argc){
+	    x = stoi(argv[i+1]);
+	    y = stoi(argv[i+2]);
+	    i+=2;
+	}
+	if(string(argv[i]) == "-V"){
+	    verbose = true;
+	}
+    }
+
 
     srand(time(NULL));
 
-    store s;
+    store s(x,y);
     string choice;
+
+    if(verbose){
+	cout << "X:" << s.sizeX << "\nY:" << s.sizeY << endl;
+    }
 
     while (true) {
         cout << "SGFY interpreter v0.1.1\n\n------------------------------------------\n"
