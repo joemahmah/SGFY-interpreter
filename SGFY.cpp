@@ -10,6 +10,7 @@
 #include <fstream>
 #include <time.h>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -24,12 +25,16 @@ struct store {
     store() : store(1024, 1024) {}
 
     store(int sizeX, int sizeY) {
+		
+		intBank.resize(sizeY);
+		
         for (int i = 0; i < sizeY; i++) {
 	    vector<int> row;
+		row.resize(sizeX);
             for (int j = 0; j < sizeX; j++) {
-                row.push_back(0);
+                row[j] = 0;
             }
-	    intBank.push_back(row);
+	    intBank[i] = row;
         }
 	this->sizeX = sizeX;
 	this->sizeY = sizeY;
@@ -268,7 +273,7 @@ int main(int argc, char** argv) {
     }
 
     while (true) {
-        cout << "SGFY interpreter v0.1.1\n\n------------------------------------------\n"
+        cout << "SGFY interpreter\n\n------------------------------------------\n"
                 << "Enter filename (cin if live interpret): ";
         cin >> choice;
         cin.clear();
