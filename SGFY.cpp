@@ -13,18 +13,26 @@
 using namespace std;
 
 struct store {
-    int intBank[128][128];
+    int intBank**;
     int index, vindex;
+    int sizeX, sizeY;
     bool printAsChar;
     bool notFlaged;
     string storedLoop;
 
-    store() {
-        for (int i = 0; i < 128; i++) {
-            for (int j = 0; j < 128; j++) {
+    store(){
+	store(1024,1024);
+    }
+
+    store(int sizeX, int sizeY) {
+	intBank = new int[sizeX][sizeY];
+        for (int i = 0; i < sizeY; i++) {
+            for (int j = 0; j < sizeX; j++) {
                 intBank[j][i] = 0;
             }
         }
+	this->sizeX = sizeX;
+	this->sizeY = sizeY;
         index = 0;
         vindex = 0;
         printAsChar = true;
@@ -46,7 +54,7 @@ void store::getCommand(istream & inputStream) {
             intBank[vindex][index]--;
             break;
         case '>':
-            if (index == 127) {
+            if (index == sizeX-1) {
                 index = 0;
             } else {
                 index++;
@@ -54,13 +62,13 @@ void store::getCommand(istream & inputStream) {
             break;
         case '<':
             if (index == 0) {
-                index = 127;
+                index = sizeX-1;
             } else {
                 index--;
             }
             break;
         case '^':
-            if (vindex == 127) {
+            if (vindex == sizeY-1) {
                 vindex = 0;
             } else {
                 vindex++;
@@ -68,7 +76,7 @@ void store::getCommand(istream & inputStream) {
             break;
         case '\\':
             if (vindex == 0) {
-                vindex = 127;
+                vindex = sizeY-1;
             } else {
                 vindex--;
             }
@@ -103,7 +111,7 @@ void store::getCommand(istream & inputStream) {
             notFlaged = false;
             break;
         case '|':
-            if (vindex < 127) {
+            if (vindex < sizeY) {
                 intBank[vindex][index] = intBank[vindex + 1][index];
             } else {
                 intBank[vindex][index] = intBank[0][index];
@@ -113,7 +121,7 @@ void store::getCommand(istream & inputStream) {
             if (index > 0) {
                 intBank[vindex][index] = intBank[vindex][index - 1];
             } else {
-                intBank[vindex][index] = intBank[vindex][127];
+                intBank[vindex][index] = intBank[vindex][sizeX-1];
             }
             break;
         case '[':
@@ -149,7 +157,7 @@ void store::getCommand(char c) {
             intBank[vindex][index]--;
             break;
         case '>':
-            if (index == 127) {
+            if (index == sizeX-1) {
                 index = 0;
             } else {
                 index++;
@@ -157,13 +165,13 @@ void store::getCommand(char c) {
             break;
         case '<':
             if (index == 0) {
-                index = 127;
+                index = sizeX-1;
             } else {
                 index--;
             }
             break;
         case '^':
-            if (vindex == 127) {
+            if (vindex == sizeY-1) {
                 vindex = 0;
             } else {
                 vindex++;
@@ -171,7 +179,7 @@ void store::getCommand(char c) {
             break;
         case '\\':
             if (vindex == 0) {
-                vindex = 127;
+                vindex = sizeY-1;
             } else {
                 vindex--;
             }
@@ -213,7 +221,7 @@ void store::getCommand(char c) {
             notFlaged = false;
             break;
         case '|':
-            if (vindex < 127) {
+            if (vindex < sizeY-1) {
                 intBank[vindex][index] = intBank[vindex + 1][index];
             } else {
                 intBank[vindex][index] = intBank[0][index];
@@ -223,7 +231,7 @@ void store::getCommand(char c) {
             if (index > 0) {
                 intBank[vindex][index] = intBank[vindex][index - 1];
             } else {
-                intBank[vindex][index] = intBank[vindex][127];
+                intBank[vindex][index] = intBank[vindex][sizeX-1];
             }
             break;
 
