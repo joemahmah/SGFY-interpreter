@@ -13,7 +13,7 @@
 using namespace std;
 
 struct store {
-    int intBank**;
+    int **intBank;
     int index, vindex;
     int sizeX, sizeY;
     bool printAsChar;
@@ -25,7 +25,10 @@ struct store {
     }
 
     store(int sizeX, int sizeY) {
-	intBank = new int[sizeX][sizeY];
+	intBank = new int*[sizeY];
+	for(int i=0; i<sizeY; i++){
+	    intBank[i] = new int[sizeX];
+	}
         for (int i = 0; i < sizeY; i++) {
             for (int j = 0; j < sizeX; j++) {
                 intBank[j][i] = 0;
