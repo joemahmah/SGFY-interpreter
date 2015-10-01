@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Sfuck.cpp
  * Author: Michael Hrcek <hrcekmj@clarkson.edu>
  *
@@ -9,22 +9,30 @@
 #include <stdlib.h>
 #include <fstream>
 #include <time.h>
+#include <vector>
 
 using namespace std;
 
 struct store {
-    int intBank[128][128];
+    vector< vector<int>  > intBank;
     int index, vindex;
+    int sizeX, sizeY;
     bool printAsChar;
     bool notFlaged;
     string storedLoop;
 
-    store() {
-        for (int i = 0; i < 128; i++) {
-            for (int j = 0; j < 128; j++) {
-                intBank[j][i] = 0;
+    store() : store(1024, 1024) {}
+
+    store(int sizeX, int sizeY) {
+        for (int i = 0; i < sizeY; i++) {
+	    vector<int> row;
+            for (int j = 0; j < sizeX; j++) {
+                row.push_back(0);
             }
+	    intBank.push_back(row);
         }
+	this->sizeX = sizeX;
+	this->sizeY = sizeY;
         index = 0;
         vindex = 0;
         printAsChar = true;
@@ -46,7 +54,7 @@ void store::getCommand(istream & inputStream) {
             intBank[vindex][index]--;
             break;
         case '>':
-            if (index == 127) {
+            if (index == sizeX-1) {
                 index = 0;
             } else {
                 index++;
@@ -54,13 +62,13 @@ void store::getCommand(istream & inputStream) {
             break;
         case '<':
             if (index == 0) {
-                index = 127;
+                index = sizeX-1;
             } else {
                 index--;
             }
             break;
         case '^':
-            if (vindex == 127) {
+            if (vindex == sizeY-1) {
                 vindex = 0;
             } else {
                 vindex++;
@@ -68,7 +76,7 @@ void store::getCommand(istream & inputStream) {
             break;
         case '\\':
             if (vindex == 0) {
-                vindex = 127;
+                vindex = sizeY-1;
             } else {
                 vindex--;
             }
@@ -103,7 +111,7 @@ void store::getCommand(istream & inputStream) {
             notFlaged = false;
             break;
         case '|':
-            if (vindex < 127) {
+            if (vindex < sizeY) {
                 intBank[vindex][index] = intBank[vindex + 1][index];
             } else {
                 intBank[vindex][index] = intBank[0][index];
@@ -113,7 +121,7 @@ void store::getCommand(istream & inputStream) {
             if (index > 0) {
                 intBank[vindex][index] = intBank[vindex][index - 1];
             } else {
-                intBank[vindex][index] = intBank[vindex][127];
+                intBank[vindex][index] = intBank[vindex][sizeX-1];
             }
             break;
         case '[':
@@ -149,7 +157,7 @@ void store::getCommand(char c) {
             intBank[vindex][index]--;
             break;
         case '>':
-            if (index == 127) {
+            if (index == sizeX-1) {
                 index = 0;
             } else {
                 index++;
@@ -157,13 +165,13 @@ void store::getCommand(char c) {
             break;
         case '<':
             if (index == 0) {
-                index = 127;
+                index = sizeX-1;
             } else {
                 index--;
             }
             break;
         case '^':
-            if (vindex == 127) {
+            if (vindex == sizeY-1) {
                 vindex = 0;
             } else {
                 vindex++;
@@ -171,7 +179,7 @@ void store::getCommand(char c) {
             break;
         case '\\':
             if (vindex == 0) {
-                vindex = 127;
+                vindex = sizeY-1;
             } else {
                 vindex--;
             }
@@ -213,7 +221,7 @@ void store::getCommand(char c) {
             notFlaged = false;
             break;
         case '|':
-            if (vindex < 127) {
+            if (vindex < sizeY-1) {
                 intBank[vindex][index] = intBank[vindex + 1][index];
             } else {
                 intBank[vindex][index] = intBank[0][index];
@@ -223,7 +231,7 @@ void store::getCommand(char c) {
             if (index > 0) {
                 intBank[vindex][index] = intBank[vindex][index - 1];
             } else {
-                intBank[vindex][index] = intBank[vindex][127];
+                intBank[vindex][index] = intBank[vindex][sizeX-1];
             }
             break;
 
@@ -235,17 +243,36 @@ void store::getCommand(char c) {
  */
 int main(int argc, char** argv) {
 
+    int x = 1024, y = 1024;
+    bool verbose = false;
+
+    for(int i=1; i<argc; i++){
+	if(string(argv[i]) == "-S" && i + 2 < argc){
+	    x = stoi(argv[i+1]);
+	    y = stoi(argv[i+2]);
+	    i+=2;
+	}
+	if(string(argv[i]) == "-V"){
+	    verbose = true;
+	}
+    }
+
 
     srand(time(NULL));
 
-    store s;
+    store s(x,y);
     string choice;
+
+    if(verbose){
+	cout << "X:" << s.sizeX << "\nY:" << s.sizeY << endl;
+    }
 
     while (true) {
         cout << "SGFY interpreter v0.1.1\n\n------------------------------------------\n"
                 << "Enter filename (cin if live interpret): ";
         cin >> choice;
         cin.clear();
+
 
         s.notFlaged = true;
 
