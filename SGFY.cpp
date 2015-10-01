@@ -9,30 +9,27 @@
 #include <stdlib.h>
 #include <fstream>
 #include <time.h>
+#include <vector>
 
 using namespace std;
 
 struct store {
-    int **intBank;
+    vector< vector<int>  > intBank;
     int index, vindex;
     int sizeX, sizeY;
     bool printAsChar;
     bool notFlaged;
     string storedLoop;
 
-    store(){
-	store(1024,1024);
-    }
+    store() : store(1024, 1024) {}
 
     store(int sizeX, int sizeY) {
-	intBank = new int*[sizeY];
-	for(int i=0; i<sizeY; i++){
-	    intBank[i] = new int[sizeX];
-	}
         for (int i = 0; i < sizeY; i++) {
+	    vector<int> row;
             for (int j = 0; j < sizeX; j++) {
-                intBank[j][i] = 0;
+                row.push_back(0);
             }
+	    intBank.push_back(row);
         }
 	this->sizeX = sizeX;
 	this->sizeY = sizeY;
@@ -257,6 +254,7 @@ int main(int argc, char** argv) {
                 << "Enter filename (cin if live interpret): ";
         cin >> choice;
         cin.clear();
+
 
         s.notFlaged = true;
 
