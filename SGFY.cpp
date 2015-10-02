@@ -253,6 +253,10 @@ int main(int argc, char** argv) {
     string fileLocation = "";
 
     for(int i=1; i<argc; i++){
+	if(string(argv[i]) == "-h" || string(argv[i]) == "--help"){
+	    //List params
+	    return 0;
+	}
 	if(string(argv[i]) == "-S" && i + 2 < argc){
 	    x = stoi(argv[i+1]);
 	    y = stoi(argv[i+2]);
@@ -276,9 +280,7 @@ int main(int argc, char** argv) {
 	cout << "X:" << s.sizeX << "\nY:" << s.sizeY << endl;
     }
 
-    while (true) {
-
-	cout <<
+    cout <<
 "             .        .--.                                                         \n"<<
 "           .'|        |__|                                                         \n"<<
 "          <  |        .--.     .|                                                  \n"<<
@@ -329,20 +331,17 @@ int main(int argc, char** argv) {
 "   |`-' /                       \\_\\    /                                           \n"<<
 "    '..'                         `''--'                                            \n\n";
 
-        s.notFlaged = true;
+    s.notFlaged = true;
 
-        if (fileLocation == "") {
-            while (s.notFlaged) {
-                s.getCommand(cin);
-            }
-        } else {
-            ifstream stream(fileLocation);
-            while (!stream.eof()) {
-                s.getCommand(stream);
-            }
+    if (fileLocation == "") {
+        while (s.notFlaged) {
+            s.getCommand(cin);
         }
-
-        cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    } else {
+        ifstream stream(fileLocation);
+        while (!stream.eof()) {
+            s.getCommand(stream);
+        }
     }
 
     return 0;
