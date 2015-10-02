@@ -116,7 +116,7 @@ void store::getCommand(istream & inputStream) {
             notFlaged = false;
             break;
         case '|':
-            if (vindex < sizeY) {
+            if (vindex < sizeY-1) {
                 intBank[vindex][index] = intBank[vindex + 1][index];
             } else {
                 intBank[vindex][index] = intBank[0][index];
@@ -280,6 +280,7 @@ int main(int argc, char** argv) {
 	cout << "X:" << s.sizeX << "\nY:" << s.sizeY << endl;
     }
 
+    if(!verbose){
     cout <<
 "             .        .--.                                                         \n"<<
 "           .'|        |__|                                                         \n"<<
@@ -330,8 +331,13 @@ int main(int argc, char** argv) {
 "       / /                      | |    |                                           \n"<<
 "   |`-' /                       \\_\\    /                                           \n"<<
 "    '..'                         `''--'                                            \n\n";
+    }
 
     s.notFlaged = true;
+
+    if(verbose){
+	cout << "Reading from file " << fileLocation << endl;
+    }
 
     if (fileLocation == "") {
         while (s.notFlaged) {
