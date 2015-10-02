@@ -25,9 +25,9 @@ struct store {
     store() : store(1024, 1024) {}
 
     store(int sizeX, int sizeY) {
-		
-		intBank.resize(sizeY);
-		
+
+	intBank.resize(sizeY);
+
         for (int i = 0; i < sizeY; i++) {
 	    vector<int> row;
 		row.resize(sizeX);
@@ -250,6 +250,7 @@ int main(int argc, char** argv) {
 
     int x = 1024, y = 1024;
     bool verbose = false;
+    string fileLocation = "";
 
     for(int i=1; i<argc; i++){
 	if(string(argv[i]) == "-S" && i + 2 < argc){
@@ -260,33 +261,82 @@ int main(int argc, char** argv) {
 	if(string(argv[i]) == "-V"){
 	    verbose = true;
 	}
+	if(string(argv[i]) == "--file" && i + 1 < argc){
+	    fileLocation = argv[i+1];
+	    i+=1;
+	}
     }
 
 
     srand(time(NULL));
 
     store s(x,y);
-    string choice;
 
     if(verbose){
 	cout << "X:" << s.sizeX << "\nY:" << s.sizeY << endl;
     }
 
     while (true) {
-        cout << "SGFY interpreter\n\n------------------------------------------\n"
-                << "Enter filename (cin if live interpret): ";
-        cin >> choice;
-        cin.clear();
 
+	cout <<
+"             .        .--.                                                         \n"<<
+"           .'|        |__|                                                         \n"<<
+"          <  |        .--.     .|                                                  \n"<<
+"           | |        |  |   .' |_                                                 \n"<<
+"       _   | | .'''-. |  | .'     |                                                \n"<<
+"     .' |  | |/.'''. \\|  |'--.  .-'                                                \n"<<
+"    .   | /|  /    | ||  |   |  |                                                  \n"<<
+"  .'.'| |//| |     | ||__|   |  |                                                  \n"<<
+".'.'.-'  / | |     | |       |  '.'                                                \n"<<
+".'   \\_.'  | '.    | '.      |   /                                                 \n"<<
+"           '---'   '---'     `'-'                                                  \n"<<
+"            .-'''-.                                                                \n"<<
+"           '   _    \\                                                              \n"<<
+"         /   /` '.   \\                                                             \n"<<
+"  .--./).   |     \\  '                                                             \n"<<
+" /.''\\ |   '      |  '  .|                                                        \n"<<
+"| |  | |\\    \\     / / .' |_                                                       \n"<<
+" \\`-' /  `.   ` ..' /.'     |                                                      \n"<<
+" /(\"'`      '-...-'`'--.  .-'                                                      \n"<<
+" \\ '---.               |  |                                                        \n"<<
+"  /'\"\"'.\\              |  |                                                        \n"<<
+" ||     ||             |  '.'                                                      \n"<<
+" \\'. __//              |   /                                                       \n"<<
+"  `'---'               `'-'                                                        \n"<<
+"                        _..._                                                      \n"<<
+"                     .-'_..._''.                              _______              \n"<<
+"                   .' .'      '.\\    .           __.....__    \\  ___ `'.           \n"<<
+"     _.._         / .'             .'|       .-''         '.   ' |--.\\  \\          \n"<<
+"   .' .._|       . '             .'  |      /     .-''\"'-.  `. | |    \\  '         \n"<<
+"   | '           | |            <    |     /     /________\\   \\| |     |  '        \n"<<
+" __| |__  _    _ | |             |   | ____|                  || |     |  |        \n"<<
+"|__   __|| '  / |. '             |   | \\ .'\\    .-------------'| |     ' .',.--.   \n"<<
+"   | |  .' | .' | \\ '.          .|   |/  .  \\    '-.____...---.| |___.' /'//    \\  \n"<<
+"   | |  /  | /  |  '. `._____.-'/|    /\\  \\  `.             .'/_______.'/ \\     | \n"<<
+"   | | |   `'.  |    `-.______ / |   |  \\  \\   `''-...... -'  \\_______|/   `'-) /  \n"<<
+"   | | '   .'|  '/            `  '    \\  \\  \\                                /.'   \n"<<
+"   |_|  `-'  `--'   .-'''-.     '--===-'  '---'                                    \n"<<
+"                   '   _    \\   .'/   \\                                            \n"<<
+"                 /   /` '.   \\ / /     \\                                           \n"<<
+" .-.          .-.   |     \\  ' | |     |                                           \n"<<
+"  \\ \\        / /|   '      |  '| |     |                                           \n"<<
+"   \\ \\      / / \\    \\     / / |/`.   .'                                           \n"<<
+"    \\ \\    / /   `.   ` ..' /   `.|   |                                            \n"<<
+"     \\ \\  / /       '-...-'`     ||___|                                            \n"<<
+"      \\ `  /                     |/___/                                            \n"<<
+"       \\  /                      .'.--.                                            \n"<<
+"       / /                      | |    |                                           \n"<<
+"   |`-' /                       \\_\\    /                                           \n"<<
+"    '..'                         `''--'                                            \n\n";
 
         s.notFlaged = true;
 
-        if (choice == "cin") {
+        if (fileLocation == "") {
             while (s.notFlaged) {
                 s.getCommand(cin);
             }
         } else {
-            ifstream stream(choice);
+            ifstream stream(fileLocation);
             while (!stream.eof()) {
                 s.getCommand(stream);
             }
@@ -294,15 +344,6 @@ int main(int argc, char** argv) {
 
         cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
     }
-
-    //    if (argc <= 1) {
-    //        while (true) {
-    //            s.getCommand(cin.get());
-    //        }
-    //    } else{
-    //        //Get args
-    //    }
-
 
     return 0;
 }
