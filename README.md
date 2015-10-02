@@ -6,4 +6,4 @@ Currently, linux x64 is the only platform which will recieve regular releases. L
 #Using the SGFY Interpreter
 The interpreter is designed for use via the terminal. On a linux system, the program can be launched using ./SGFY
 
-Currently, the program will not take files as an argument... This will likely change very soon!
+If you want to interprate a file, you can use the flag --file [file location].
