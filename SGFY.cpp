@@ -18,14 +18,17 @@ struct store {
     vector< vector<int>  > intBank;
     int index, vindex;
     int sizeX, sizeY;
+    int loopCounter;
     bool printAsChar;
     bool notFlaged;
-    string storedLoop;
+    bool verbose;
+    vector<string> storedLoop;
 
     store() : store(1024, 1024) {}
 
-    store(int sizeX, int sizeY) {
+    store(int sizeX, int sizeY, bool verbose = false) {
 
+	storedLoop.resize(10);
 	intBank.resize(sizeY);
 
         for (int i = 0; i < sizeY; i++) {
@@ -40,119 +43,25 @@ struct store {
 	this->sizeY = sizeY;
         index = 0;
         vindex = 0;
+	loopCounter = 0;
         printAsChar = true;
+	this->verbose = verbose;
     }
 
     void getCommand(istream & inputStream);
-    void getCommand(char c);
+    void getCommand(char c, bool isLoop=false);
 };
 
 void store::getCommand(istream & inputStream) {
 
     char c = inputStream.get();
+    getCommand(c);
 
-    switch (c) {
-        case '+':
-            intBank[vindex][index]++;
-            break;
-        case '-':
-            intBank[vindex][index]--;
-            break;
-        case '>':
-            if (index == sizeX-1) {
-                index = 0;
-            } else {
-                index++;
-            }
-            break;
-        case '<':
-            if (index == 0) {
-                index = sizeX-1;
-            } else {
-                index--;
-            }
-            break;
-        case '^':
-            if (vindex == sizeY-1) {
-                vindex = 0;
-            } else {
-                vindex++;
-            }
-            break;
-        case '\\':
-            if (vindex == 0) {
-                vindex = sizeY-1;
-            } else {
-                vindex--;
-            }
-            break;
-        case '#':
-            index = vindex = 0;
-            break;
-        case ',':
-            intBank[vindex][index] = (int) cin.get();
-            break;
-        case '.':
-            if (printAsChar) {
-                cout << (char) intBank[vindex][index];
-            } else {
-                cout << intBank[vindex][index];
-            }
-            break;
-        case '=':
-            if (intBank[vindex][index] == (int) 'x') {
-                intBank[vindex][index] = 1;
-            } else {
-                intBank[vindex][index] = 0;
-            }
-            break;
-        case '?':
-            intBank[vindex][index] = rand();
-            break;
-        case '@':
-            printAsChar = !printAsChar;
-            break;
-        case '~':
-            notFlaged = false;
-            break;
-        case '|':
-            if (vindex < sizeY-1) {
-                intBank[vindex][index] = intBank[vindex + 1][index];
-            } else {
-                intBank[vindex][index] = intBank[0][index];
-            }
-            break;
-        case '}':
-            if (index > 0) {
-                intBank[vindex][index] = intBank[vindex][index - 1];
-            } else {
-                intBank[vindex][index] = intBank[vindex][sizeX-1];
-            }
-            break;
-        case '[':
-            if (intBank[vindex][index] != 0) {
-                while (inputStream.peek() != ']') {
-                    storedLoop += inputStream.get();
-                }
-            } else {
-                while (inputStream.get() != ']') {
-
-                }
-            }
-            break;
-        case ']':
-            while (intBank[vindex][index] != 0) {
-                for (char c : storedLoop) {
-                    this->getCommand(c);
-                }
-            }
-            storedLoop = "";
-            break;
-
-    }
 }
 
-void store::getCommand(char c) {
+void store::getCommand(char c, bool isLoop) {
+
+if(loopCounter == 0 || isLoop){
 
     switch (c) {
         case '+':
@@ -239,8 +148,47 @@ void store::getCommand(char c) {
                 intBank[vindex][index] = intBank[vindex][sizeX-1];
             }
             break;
+        case '[':
+	    loopCounter++;
+            break;
+        case ']':
+            while (intBank[vindex][index] != 0 && loopCounter > 0) {
+                for (char c : storedLoop[loopCounter-1]) {
+                    getCommand(c,true);
+                }
+            }
+            storedLoop[loopCounter-1] = "";
+	    loopCounter--;
+            break;
 
     }
+} else if (loopCounter > 0){
+
+    if(verbose){
+	cout << "Current Loop: " << loopCounter << endl;
+    }
+
+    if(c == '[' || c == ']'){
+    	switch(c){
+	    case '[':
+	        loopCounter++;
+       	        break;
+            case ']':
+                while (intBank[vindex][index] != 0 && loopCounter > 0) {
+		    for (char c : storedLoop[loopCounter-1]) {
+                        getCommand(c,true);
+                    }
+                }
+                storedLoop[loopCounter-1] = "";
+	        loopCounter--;
+                break;
+    	}
+    } else{
+	storedLoop[loopCounter-1] += c;
+    }
+} else{
+    loopCounter = 0;
+}
 }
 
 /*
@@ -274,7 +222,7 @@ int main(int argc, char** argv) {
 
     srand(time(NULL));
 
-    store s(x,y);
+    store s(x,y,verbose);
 
     if(verbose){
 	cout << "X:" << s.sizeX << "\nY:" << s.sizeY << endl;
