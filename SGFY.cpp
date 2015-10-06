@@ -152,14 +152,16 @@ if(loopCounter == 0 || isLoop){
 	    loopCounter++;
             break;
         case ']':
-            while (intBank[vindex][index] != 0 && loopCounter > 0) {
-                for (char c : storedLoop[loopCounter-1]) {
-                    getCommand(c,true);
-                }
-            }
-            storedLoop[loopCounter-1] = "";
 	    loopCounter--;
-            break;
+	    if(loopCounter == 0){
+            	do {
+                    for (char c : storedLoop[loopCounter]) {
+                    	getCommand(c,true);
+                    }
+            	} while(intBank[vindex][index] != 0 && loopCounter > 0);
+            	storedLoop[loopCounter] = "";
+            }
+	    break;
 
     }
 } else if (loopCounter > 0){
@@ -174,17 +176,19 @@ if(loopCounter == 0 || isLoop){
 	        loopCounter++;
        	        break;
             case ']':
-                while (intBank[vindex][index] != 0 && loopCounter > 0) {
-		    for (char c : storedLoop[loopCounter-1]) {
-                        getCommand(c,true);
-                    }
-                }
-                storedLoop[loopCounter-1] = "";
-	        loopCounter--;
+		loopCounter--;
+                if(loopCounter == 0){
+            		do {
+                    		for (char c : storedLoop[loopCounter]) {
+                    			getCommand(c,true);
+                    		}
+            		} while(intBank[vindex][index] != 0 && loopCounter > 0);
+            		storedLoop[loopCounter] = "";
+            	}
                 break;
     	}
     } else{
-	storedLoop[loopCounter-1] += c;
+	storedLoop[loopCounter] += c;
     }
 } else{
     loopCounter = 0;
