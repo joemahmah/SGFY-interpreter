@@ -1,10 +1,3 @@
-/*
- * File:   Sfuck.cpp
- * Author: Michael Hrcek <hrcekmj@clarkson.edu>
- *
- * Created on September 14, 2015, 6:25 PM
- */
-
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
